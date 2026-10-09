@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OrganiK · Control de inventario para minimarkets</title>
+    <meta name="description" content="OrganiK centraliza inventario, lotes y vencimientos para que tu minimarket reponga a tiempo y deje de perder producto.">
+    <meta name="theme-color" content="#07110b">
+    <meta property="og:title" content="OrganiK · Control de inventario para minimarkets">
+    <meta property="og:description" content="Anticipa vencimientos y gestiona el abastecimiento en tiempo real.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="public/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+
+    <a href="#main" class="skip" data-i18n="skip">Saltar al contenido</a>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+        <div class="preloader__inner">
+            <svg class="preloader__mark" viewBox="0 0 48 48" fill="none"><path class="leaf" d="M12 36C12 22 20 13 37 12c0 16-9 24-25 24z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path class="vein" d="M12 36l14-14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span class="preloader__count" id="preloader-count">000</span>
+        </div>
+        <div class="preloader__curtain"></div>
+    </div>
+
+    <div class="grain" aria-hidden="true"></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+
+    <!-- Navegación: isla de cristal flotante -->
+    <header class="nav-wrap" id="navbar">
+        <div class="nav" id="nav">
+            <a href="#hero" class="logo" aria-label="OrganiK">
+                <span class="logo__mark"><svg viewBox="0 0 32 32" fill="none"><path d="M9 23c0-8 5-13 14-14 0 9-5 14-14 14z" fill="currentColor"/><path d="M9 23l8-8" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                <span class="logo__text">OrganiK</span>
+            </a>
+            <nav class="nav__links" aria-label="Principal">
+                <a href="#ofrecemos" data-i18n="nav_product" data-nav="ofrecemos">Producto</a>
+                <a href="#proveedores" data-i18n="nav_providers" data-nav="proveedores">Proveedores</a>
+                <a href="#video-producto" data-i18n="nav_video" data-nav="video-producto">Video</a>
+                <a href="#testimonios" data-i18n="nav_testimonials" data-nav="testimonios">Testimonios</a>
+                <a href="#planes" data-i18n="nav_plans" data-nav="planes">Planes</a>
+                <a href="#conocenos" data-i18n="nav_team" data-nav="conocenos">Equipo</a>
+                <span class="nav__pill" aria-hidden="true"></span>
+            </nav>
+            <div class="nav__actions">
+                <svg class="lang-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M2.6 10h14.8M10 2.6c2.3 2.2 3.4 4.7 3.4 7.4S12.3 15.2 10 17.4C7.7 15.2 6.6 12.7 6.6 10S7.7 4.8 10 2.6z"/></svg>
+                <div id="lang-toggle" class="lang" role="group" aria-label="Idioma / Language">
+                    <span class="lang__thumb" aria-hidden="true"></span>
+                    <button type="button" class="lang__opt" data-l="es" lang="es" title="Español" aria-pressed="true">ES</button>
+                    <button type="button" class="lang__opt" data-l="en" lang="en" title="English" aria-pressed="false">EN</button>
+                </div>
+                <a href="https://organik-app-d6e58.web.app/login" class="nav__login" data-app-path="/login" data-i18n="nav_login">Iniciar sesión</a>
+                <a href="https://organik-app-d6e58.web.app/register?role=administrator" data-app-path="/register?role=administrator" class="btn btn--sm magnetic">
+                    <span class="btn__label" data-i18n="nav_start">Empezar</span>
+                    <span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span>
+                </a>
+                <button class="burger" id="burger" type="button" aria-label="Menú" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menú móvil -->
+    <div class="menu" id="menu" aria-hidden="true">
+        <nav class="menu__links">
+            <a href="#ofrecemos"><span class="menu__n">01</span><span class="menu__t" data-i18n="nav_product">Producto</span></a>
+            <a href="#proveedores"><span class="menu__n">02</span><span class="menu__t" data-i18n="nav_providers">Proveedores</span></a>
+            <a href="#video-producto"><span class="menu__n">03</span><span class="menu__t" data-i18n="nav_video">Video</span></a>
+            <a href="#testimonios"><span class="menu__n">04</span><span class="menu__t" data-i18n="nav_testimonials">Testimonios</span></a>
+            <a href="#planes"><span class="menu__n">05</span><span class="menu__t" data-i18n="nav_plans">Planes</span></a>
+            <a href="#conocenos"><span class="menu__n">06</span><span class="menu__t" data-i18n="nav_team">Equipo</span></a>
+            <a href="https://organik-d6e58.web.app/login" data-app-path="/login"><span class="menu__n">07</span><span class="menu__t" data-i18n="nav_login">Iniciar sesión</span></a>
+        </nav>
+    </div>
+
+    <main id="main">
+
+        <!-- HERO -->
+        <section id="hero" class="hero">
+            <div class="aurora" aria-hidden="true">
+                <span class="aurora__orb aurora__orb--a" data-depth="40"></span>
+                <span class="aurora__orb aurora__orb--b" data-depth="-30"></span>
+                <span class="aurora__orb aurora__orb--c" data-depth="20"></span>
+                <span class="aurora__grid"></span>
+            </div>
+
+            <div class="container hero__grid">
+                <div class="hero__copy">
+                    <p class="eyebrow" data-hero="in"><span class="eyebrow__dot"></span><span data-i18n="hero_subtitle">SISTEMA DE GESTIÓN INTEGRADO</span></p>
+                    <h1 class="display" data-split data-i18n="hero_title">Controla tu inventario <em>antes de que sea tarde</em></h1>
+                    <p class="lead" data-hero="in" data-i18n="hero_desc">Optimiza tus cantidades, anticipa vencimientos y gestiona el abastecimiento en tiempo real. La herramienta perfecta para tu minimarket.</p>
+                    <div class="hero__cta" data-hero="in">
+                        <a href="https://organik-app-d6e58.web.app/register?role=administrator" data-app-path="/register?role=administrator" class="btn btn--lg magnetic">
+                            <span class="btn__label" data-i18n="btn_start_now">Comenzar ahora</span>
+                            <span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span>
+                        </a>
+                        <a href="#video-producto" class="btn-ghost magnetic">
+                            <span class="btn-ghost__play"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 3.8v8.4a.5.5 0 0 0 .76.43l6.8-4.2a.5.5 0 0 0 0-.86l-6.8-4.2a.5.5 0 0 0-.76.43z"/></svg></span>
+                            <span data-i18n="btn_video">Ver video</span>
+                        </a>
+                    </div>
+
+                    <dl class="stats" data-hero="in">
+                        <div class="stat">
+                            <dt data-i18n="stat_1_desc">Módulos integrados</dt>
+                            <dd><span data-count="3">3</span></dd>
+                        </div>
+                        <div class="stat">
+                            <dt data-i18n="stat_2_desc">Roles de acceso</dt>
+                            <dd><span data-count="2">2</span></dd>
+                        </div>
+                        <div class="stat">
+                            <dt data-i18n="stat_3_desc">Idiomas</dt>
+                            <dd><span data-count="2">2</span></dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="hero__visual" data-hero="visual">
+                    <!-- Notificaciones flotantes -->
+                    <div class="toast toast--1" data-depth="26">
+                        <span class="toast__ico toast__ico--warn"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.2"/><path d="M10 6v4.4l2.6 1.6"/></svg></span>
+                        <span class="toast__txt" data-i18n="toast_1">Yogurt natural vence en 2 días</span>
+                    </div>
+                    <div class="toast toast--2" data-depth="-22">
+                        <span class="toast__ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5l6-3.5 6 3.5v5l-6 3.5-6-3.5z"/><path d="M4 7.5l6 3.5 6-3.5M10 11v5"/></svg></span>
+                        <span class="toast__txt" data-i18n="toast_3">Lote A-2047 recibido</span>
+                    </div>
+
+                    <div class="bezel tilt" id="mockup">
+                        <div class="bezel__core dash">
+                            <div class="dash__top">
+                                <div>
+                                    <span class="dash__label" data-i18n="mockup_title">Productos en stock</span>
+                                    <h2 class="dash__num"><span data-count="128">128</span></h2>
+                                </div>
+                                <span class="live"><i></i><span data-i18n="live">En vivo</span></span>
+                            </div>
+
+                            <div class="dash__chart" id="chart" aria-hidden="true">
+                                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                            </div>
+
+                            <div class="dash__cards">
+                                <div class="m-card">
+                                    <span data-i18n="mockup_alert">Por vencer</span>
+                                    <b data-count="12">12</b>
+                                    <svg class="m-card__ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" /><circle class="m-card__arc" cx="18" cy="18" r="15" pathLength="100" /></svg>
+                                </div>
+                                <div class="m-card m-card--out">
+                                    <span data-i18n="mockup_out">Agotados</span>
+                                    <b data-count="3">3</b>
+                                    <svg class="m-card__ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" /><circle class="m-card__arc" cx="18" cy="18" r="15" pathLength="100" /></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="toast toast--3" data-depth="34">
+                        <span class="toast__ico toast__ico--low"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v8M10 14.5v.5"/><path d="M3.5 16.5h13L10 4z" opacity="0"/><circle cx="10" cy="10" r="7.2"/></svg></span>
+                        <span class="toast__txt" data-i18n="toast_2">Stock mínimo: avena 1 kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-hint" data-hero="in" aria-hidden="true">
+                <span class="scroll-hint__line"></span>
+                <span data-i18n="scroll_hint">Desliza</span>
+            </div>
+        </section>
+
+        <!-- MARQUEE -->
+        <section class="marquee" aria-hidden="true">
+            <div class="marquee__row" data-dir="1">
+                <div class="marquee__track">
+                    <span data-i18n="tag_1">Stock</span><i></i><span data-i18n="tag_2">Vencimiento</span><i></i><span data-i18n="tag_3">Alertas</span><i></i><span data-i18n="tag_4">Stock mínimo</span><i></i><span data-i18n="tag_5">Lotes</span><i></i><span data-i18n="tag_6">Filtros</span><i></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- FUNCIONES -->
+        <section id="ofrecemos" class="section features">
+            <div class="container features__grid">
+                <div class="features__info">
+                    <div class="features__sticky">
+                        <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="offer_tag">NUESTRAS FUNCIONES</span></p>
+                        <h2 class="h2" data-split data-i18n="offer_title">Un solo lugar para <em>inventario, lotes, conservación y abastecimiento</em></h2>
+                        <p class="lead scrub-text" data-i18n="offer_desc">OrganiK normaliza y concentra la información, para que puedas ver el estado de tu stock, reponer a tiempo y evitar pérdidas. Toma decisiones informadas y cambia la forma de comprar para tu negocio.</p>
+                    </div>
+                </div>
+
+                <div class="bento">
+                    <!-- 1 · Alertas -->
+                    <article class="bezel bezel--lime reveal-card bento__a spot">
+                        <div class="bezel__core card">
+                            <div class="card__viz viz-alerts" aria-hidden="true">
+                                <div class="note s0"><i></i><span data-i18n="toast_1">Yogurt natural vence en 2 días</span></div>
+                                <div class="note s1"><i></i><span data-i18n="toast_2">Stock mínimo: avena 1 kg</span></div>
+                                <div class="note s2"><i></i><span data-i18n="toast_3">Lote A-2047 recibido</span></div>
+                            </div>
+                            <h3 data-i18n="feat_1_title">Alertas Inteligentes</h3>
+                            <p data-i18n="feat_1_desc">Recibe notificaciones sobre productos próximos a vencer o stock bajo directamente a tu celular.</p>
+                        </div>
+                    </article>
+
+                    <!-- 2 · Inventario -->
+                    <article class="bezel reveal-card bento__b spot">
+                        <div class="bezel__core card">
+                            <div class="card__viz viz-rows" aria-hidden="true">
+                                <div class="row"><b></b><span style="--w:82%"></span><em>128</em></div>
+                                <div class="row"><b></b><span style="--w:54%"></span><em>76</em></div>
+                                <div class="row"><b></b><span style="--w:31%"></span><em>41</em></div>
+                                <div class="row"><b></b><span style="--w:68%"></span><em>94</em></div>
+                            </div>
+                            <h3 data-i18n="feat_2_title">Inventario centralizado</h3>
+                            <p data-i18n="feat_2_desc">Todo tu catálogo en un solo lugar.</p>
+                        </div>
+                    </article>
+
+                    <!-- 3 · Lotes -->
+                    <article class="bezel reveal-card bento__c spot">
+                        <div class="bezel__core card">
+                            <div class="card__viz viz-batch" aria-hidden="true">
+                                <span class="batch" data-batch>L-2041-A</span>
+                                <span class="batch__bar"><i></i></span>
+                            </div>
+                            <h3 data-i18n="feat_3_title">Control de lotes</h3>
+                            <p data-i18n="feat_3_desc">Seguimiento preciso por número de lote.</p>
+                        </div>
+                    </article>
+
+                    <!-- 4 · Vencimientos -->
+                    <article class="bezel reveal-card bento__d spot">
+                        <div class="bezel__core card">
+                            <div class="card__viz viz-ring" aria-hidden="true">
+                                <svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="50"/><circle class="ring-fg" cx="60" cy="60" r="50" pathLength="100"/></svg>
+                                <div class="ring-n"><b data-ring>14</b><span data-i18n="ring_days">días</span></div>
+                            </div>
+                            <h3 data-i18n="feat_4_title">Fechas de vencimiento</h3>
+                            <p data-i18n="feat_4_desc">Prevén pérdidas priorizando salidas.</p>
+                        </div>
+                    </article>
+
+                    <!-- 5 · Roles -->
+                    <article class="bezel reveal-card bento__e spot">
+                        <div class="bezel__core card card--wide">
+                            <div class="card__viz viz-roles" aria-hidden="true">
+                                <div class="roles">
+                                    <span class="role is-on" data-i18n="role_1">Administrador</span>
+                                    <span class="role" data-i18n="role_2">Proveedor</span>
+                                </div>
+                                <div class="bars" data-bars>
+                                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 data-i18n="feat_5_title">Reportes por rol</h3>
+                                <p data-i18n="feat_5_desc">Vistas personalizadas para tu equipo.</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- PARA PROVEEDORES -->
+        <section id="proveedores" class="section providers">
+            <div class="container">
+                <div class="section__head section__head--center">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="prov_tag">PARA PROVEEDORES</span></p>
+                    <h2 class="h2" data-split data-i18n="prov_title">Llega a más minimarkets con tu <em>catálogo orgánico</em></h2>
+                    <p class="lead reveal" data-i18n="prov_desc">Si abasteces minimarkets, OrganiK te conecta con ellos: publica tu catálogo, entérate de lo que necesitan reponer y gestiona tus pedidos en un solo lugar.</p>
+                </div>
+
+                <div class="prov__grid">
+                    <article class="bezel reveal-card spot">
+                        <div class="bezel__core card prov__card">
+                            <span class="prov__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg></span>
+                            <div>
+                                <h3 data-i18n="prov_1_title">Publica tu catálogo</h3>
+                                <p data-i18n="prov_1_desc">Tus productos, disponibilidad y lotes siempre actualizados para los minimarkets vinculados.</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card spot">
+                        <div class="bezel__core card prov__card">
+                            <span class="prov__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l3 3v15H6z"/><path d="M9 11h6M9 15h6M9 7h3"/></svg></span>
+                            <div>
+                                <h3 data-i18n="prov_2_title">Recibe necesidades de reposición</h3>
+                                <p data-i18n="prov_2_desc">Mira qué necesita cada minimarket y anticípate antes de que se quede sin stock.</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card spot">
+                        <div class="bezel__core card prov__card">
+                            <span class="prov__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span>
+                            <div>
+                                <h3 data-i18n="prov_3_title">Gestiona tus pedidos</h3>
+                                <p data-i18n="prov_3_desc">Crea pedidos dirigidos al minimarket y sigue su estado hasta que el administrador los acepta.</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="prov__cta reveal">
+                    <a href="https://organik-app-d6e58.web.app/register?role=supplier" data-app-path="/register?role=supplier" class="btn btn--lg magnetic">
+                        <span class="btn__label" data-i18n="prov_btn">Registrarme como proveedor</span>
+                        <span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span>
+                    </a>
+                    <a href="https://organik-app-d6e58.web.app/login" data-app-path="/login" class="btn-ghost magnetic">
+                        <span data-i18n="prov_login">Ya tengo cuenta</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TODO SOBRE EL PRODUCTO: funciones, proveedores, video, testimonios y planes ===== -->
+
+        <!-- VIDEO DEL PRODUCTO -->
+        <!-- Placeholder: cuando exista el video, reemplaza el contenido de .vid (o el .bezel completo) por un <video> o un <iframe> -->
+        <section id="video-producto" class="section videos videos--product">
+            <div class="container video-split">
+                <div class="section__head video-split__head">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="vprod_tag">VIDEO DEL PRODUCTO</span></p>
+                    <h2 class="h2" data-split data-i18n="vprod_title">Descubre <em>OrganiK</em> en acción</h2>
+                    <p class="lead reveal" data-i18n="vprod_desc">Mira cómo OrganiK centraliza inventario, lotes, vencimientos y abastecimiento para tu minimarket.</p>
+                </div>
+
+                <article class="video-card">
+                        <div class="bezel bezel--video">
+                            <div class="bezel__core vid vid--light" data-video>
+                                <div class="vid__art" aria-hidden="true">
+                                    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+                                    <div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                                </div>
+                                <span class="vid__soon" data-i18n="video_soon">Próximamente</span>
+                                <button class="play magnetic" type="button" aria-label="Play" data-cursor="play">
+                                    <span class="play__ring"></span><span class="play__ring"></span>
+                                    <svg class="play__i" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 3.8v8.4a.5.5 0 0 0 .76.43l6.8-4.2a.5.5 0 0 0 0-.86l-6.8-4.2a.5.5 0 0 0-.76.43z"/></svg>
+                                    <svg class="play__p" viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="3.5" width="2.8" height="9" rx=".8"/><rect x="9.2" y="3.5" width="2.8" height="9" rx=".8"/></svg>
+                                </button>
+                                <span class="vid__time"><i></i></span>
+                            </div>
+                        </div>
+                    <div class="video-info">
+                        <h3 data-i18n="vprod_card_title">Así funciona OrganiK</h3>
+                        <p data-i18n="vprod_card_desc">El boom de los productos saludables y cómo la tecnología apoya esto.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- TESTIMONIOS -->
+        <!-- Textos de ejemplo: reemplázalos por testimonios reales de clientes antes de publicar -->
+        <section id="testimonios" class="section testimonials">
+            <div class="container">
+                <div class="section__head section__head--center">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="testi_tag">TESTIMONIOS</span></p>
+                    <h2 class="h2" data-split data-i18n="testi_title">Lo que dicen los <em>minimarkets</em></h2>
+                </div>
+
+                <div class="testi__grid">
+                    <article class="bezel reveal-card spot testi">
+                        <figure class="bezel__core testi__core">
+                            <div class="testi__top">
+                                <div class="testi__stars" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg></div>
+                                <span class="testi__metric" data-i18n="testi_1_metric"></span>
+                            </div>
+                            <blockquote class="testi__quote" data-i18n="testi_1_quote"></blockquote>
+                            <figcaption class="testi__who">
+                                <span class="testi__avatar" aria-hidden="true">R</span>
+                                <span><b class="testi__name">Rosa Quispe</b><span class="testi__role" data-i18n="testi_1_role"></span></span>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="bezel bezel--lime reveal-card spot testi">
+                        <figure class="bezel__core testi__core">
+                            <div class="testi__top">
+                                <div class="testi__stars" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg></div>
+                                <span class="testi__metric" data-i18n="testi_2_metric"></span>
+                            </div>
+                            <blockquote class="testi__quote" data-i18n="testi_2_quote"></blockquote>
+                            <figcaption class="testi__who">
+                                <span class="testi__avatar" aria-hidden="true">C</span>
+                                <span><b class="testi__name">Carlos Mendoza</b><span class="testi__role" data-i18n="testi_2_role"></span></span>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="bezel reveal-card spot testi">
+                        <figure class="bezel__core testi__core">
+                            <div class="testi__top">
+                                <div class="testi__stars" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.5 5.3 5.7.7-4.2 4 1.1 5.7L10 14.7 4.9 17.5 6 11.8 1.8 7.8l5.7-.7z"/></svg></div>
+                                <span class="testi__metric" data-i18n="testi_3_metric"></span>
+                            </div>
+                            <blockquote class="testi__quote" data-i18n="testi_3_quote"></blockquote>
+                            <figcaption class="testi__who">
+                                <span class="testi__avatar" aria-hidden="true">L</span>
+                                <span><b class="testi__name">Lucía Fernández</b><span class="testi__role" data-i18n="testi_3_role"></span></span>
+                            </figcaption>
+                        </figure>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLANES -->
+        <section id="planes" class="section plans">
+            <div class="container">
+                <div class="section__head section__head--center">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="plans_tag">PRECIOS</span></p>
+                    <h2 class="h2" data-split data-i18n="plans_title">Un plan para cada tamaño de <em>minimarket</em></h2>
+                </div>
+
+                <div class="segments" role="tablist" aria-label="Segmento / Segment">
+                    <button type="button" role="tab" id="seg-minimarket" class="segments__tab is-on" aria-selected="true" aria-controls="plans-minimarket" data-segment="minimarket" data-i18n="seg_minimarket">Minimarkets</button>
+                    <button type="button" role="tab" id="seg-supplier" class="segments__tab" aria-selected="false" aria-controls="plans-supplier" data-segment="supplier" data-i18n="seg_supplier">Proveedores</button>
+                </div>
+
+                <div class="pricing" id="plans-minimarket" role="tabpanel" aria-labelledby="seg-minimarket">
+                    <article class="bezel reveal-card tilt">
+                        <div class="bezel__core price-card">
+                            <h3 data-i18n="plan_1_title">Básico</h3>
+                            <div class="price"><span class="price__cur">S/</span><span class="price__n" data-count="79">79</span><span class="price__mo" data-i18n="plan_mo">/mes</span></div>
+                            <ul class="plist">
+                                <li data-i18n="plan_f1">Hasta 500 productos</li>
+                                <li data-i18n="plan_f2">1 usuario</li>
+                                <li data-i18n="plan_f3">Soporte por email</li>
+                            </ul>
+                            <a href="https://organik-app-d6e58.web.app/register?role=administrator&plan=basic" data-app-path="/register?role=administrator&plan=basic" class="btn btn--block btn--quiet magnetic"><span class="btn__label" data-i18n="btn_choose">Elegir plan</span><span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span></a>
+                        </div>
+                    </article>
+
+                    <article class="bezel bezel--hot reveal-card tilt">
+                        <div class="bezel__core price-card price-card--hot">
+                            <span class="badge" data-i18n="plan_popular">Más popular</span>
+                            <h3 data-i18n="plan_2_title">Profesional</h3>
+                            <div class="price"><span class="price__cur">S/</span><span class="price__n" data-count="149">149</span><span class="price__mo" data-i18n="plan_mo">/mes</span></div>
+                            <ul class="plist">
+                                <li data-i18n="plan_f4">Productos ilimitados</li>
+                                <li data-i18n="plan_f5">Hasta 3 usuarios</li>
+                                <li data-i18n="plan_f6">Alertas WhatsApp</li>
+                            </ul>
+                            <a href="https://organik-app-d6e58.web.app/register?role=administrator&plan=professional" data-app-path="/register?role=administrator&plan=professional" class="btn btn--block magnetic"><span class="btn__label" data-i18n="btn_choose">Elegir plan</span><span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span></a>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card tilt">
+                        <div class="bezel__core price-card">
+                            <h3 data-i18n="plan_3_title">Empresarial</h3>
+                            <div class="price price--text"><span class="price__n" data-i18n="plan_custom">A medida</span></div>
+                            <ul class="plist">
+                                <li data-i18n="plan_f7">Múltiples sucursales</li>
+                                <li data-i18n="plan_f8">Usuarios ilimitados</li>
+                                <li data-i18n="plan_f9">Soporte 24/7</li>
+                            </ul>
+                            <a href="https://organik-app-d6e58.web.app/register?role=administrator&plan=enterprise" data-app-path="/register?role=administrator&plan=enterprise" class="btn btn--block btn--quiet magnetic"><span class="btn__label" data-i18n="btn_choose">Elegir plan</span><span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span></a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="pricing pricing--two" id="plans-supplier" role="tabpanel" aria-labelledby="seg-supplier" hidden>
+                    <article class="bezel reveal-card tilt">
+                        <div class="bezel__core price-card">
+                            <h3 data-i18n="splan_1_title">Catálogo</h3>
+                            <div class="price price--text"><span class="price__n" data-i18n="plan_custom">A medida</span></div>
+                            <ul class="plist">
+                                <li data-i18n="splan_f1">Publica tus productos y lotes</li>
+                                <li data-i18n="splan_f2">Disponibilidad visible para tus minimarkets</li>
+                                <li data-i18n="splan_f3">Consulta de necesidades</li>
+                            </ul>
+                            <a href="https://organik-app-d6e58.web.app/register?role=supplier&plan=listing" data-app-path="/register?role=supplier&plan=listing" class="btn btn--block btn--quiet magnetic"><span class="btn__label" data-i18n="btn_choose">Elegir plan</span><span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span></a>
+                        </div>
+                    </article>
+
+                    <article class="bezel bezel--hot reveal-card tilt">
+                        <div class="bezel__core price-card price-card--hot">
+                            <span class="badge" data-i18n="plan_popular">Más popular</span>
+                            <h3 data-i18n="splan_2_title">Aliado</h3>
+                            <div class="price price--text"><span class="price__n" data-i18n="plan_custom">A medida</span></div>
+                            <ul class="plist">
+                                <li data-i18n="splan_f4">Todo lo del plan Catálogo</li>
+                                <li data-i18n="splan_f5">Pedidos a minimarkets vinculados</li>
+                                <li data-i18n="splan_f6">Historial de abastecimiento</li>
+                            </ul>
+                            <a href="https://organik-app-d6e58.web.app/register?role=supplier&plan=partner" data-app-path="/register?role=supplier&plan=partner" class="btn btn--block magnetic"><span class="btn__label" data-i18n="btn_choose">Elegir plan</span><span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span></a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TODO SOBRE EL EQUIPO: el contenedor #conocenos agrupa el video y los integrantes para el menú ===== -->
+        <div id="conocenos">
+
+        <!-- VIDEO DEL EQUIPO -->
+        <!-- Placeholder: cuando exista el video, reemplaza el contenido de .vid (o el .bezel completo) por un <video> o un <iframe> -->
+        <section id="video-equipo" class="section videos">
+            <div class="container">
+                <div class="section__head section__head--center">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="vteam_tag">VIDEO DEL EQUIPO</span></p>
+                    <h2 class="h2" data-split data-i18n="vteam_title">Conoce al <em>equipo</em> detrás de OrganiK</h2>
+                </div>
+
+                <article class="video-card video-solo">
+                        <div class="bezel bezel--video">
+                            <div class="bezel__core vid vid--dark" data-video>
+                                <div class="vid__art" aria-hidden="true">
+                                    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+                                    <div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                                </div>
+                                <span class="vid__soon" data-i18n="video_soon">Próximamente</span>
+                                <button class="play magnetic" type="button" aria-label="Play" data-cursor="play">
+                                    <span class="play__ring"></span><span class="play__ring"></span>
+                                    <svg class="play__i" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 3.8v8.4a.5.5 0 0 0 .76.43l6.8-4.2a.5.5 0 0 0 0-.86l-6.8-4.2a.5.5 0 0 0-.76.43z"/></svg>
+                                    <svg class="play__p" viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="3.5" width="2.8" height="9" rx=".8"/><rect x="9.2" y="3.5" width="2.8" height="9" rx=".8"/></svg>
+                                </button>
+                                <span class="vid__time"><i></i></span>
+                            </div>
+                        </div>
+                    <div class="video-info">
+                        <h3 data-i18n="vteam_card_title">Las personas detrás de OrganiK</h3>
+                        <p data-i18n="vteam_card_desc">Un equipo dedicado a facilitar la administración de los minimarkets.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- EQUIPO -->
+        <!-- Para cambiar una foto, reemplaza public/team/<nombre>.jpg (4:5, por ejemplo 640x800 px) -->
+        <section id="equipo" class="section team">
+            <div class="container">
+                <div class="section__head">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="team_tag">NUESTRO EQUIPO</span></p>
+                    <h2 class="h2" data-split data-i18n="team_title">Las personas detrás de <em>OrganiK</em></h2>
+                    <p class="lead reveal" data-i18n="team_desc">Cinco integrantes, una misma meta: que ningún minimarket vuelva a perder producto por falta de control.</p>
+                </div>
+
+                <div class="team__grid">
+                    <article class="bezel reveal-card spot member">
+                        <div class="bezel__core member__core">
+                            <div class="member__photo">
+                                <img class="member__img" src="public/team/albino.jpg?v=2" width="640" height="800" loading="lazy" alt="Foto de Albino Florencio Cáceres Pizarro">
+                            </div>
+                            <div class="member__body">
+                                <p class="member__code"><small data-i18n="team_code">Código de alumno</small><b>U201923820</b></p>
+                                <h3 class="member__name">Albino Florencio Cáceres Pizarro</h3>
+                                <p class="member__quote" data-i18n="team_m1_quote">“Trabajo en equipo, ayudo a quien lo necesite y me adapto rápido a cada reto.”</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card spot member">
+                        <div class="bezel__core member__core">
+                            <div class="member__photo">
+                                <img class="member__img" src="public/team/cielo.jpg?v=2" width="640" height="800" loading="lazy" alt="Foto de Cielo Valentina Atencio Cristobal">
+                            </div>
+                            <div class="member__body">
+                                <p class="member__code"><small data-i18n="team_code">Código de alumno</small><b>U202424216</b></p>
+                                <h3 class="member__name">Cielo Valentina Atencio Cristobal</h3>
+                                <p class="member__quote" data-i18n="team_m2_quote">“Creatividad y responsabilidad para convertir ideas en diseño, juego y tecnología.”</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card spot member">
+                        <div class="bezel__core member__core">
+                            <div class="member__photo">
+                                <img class="member__img" src="public/team/gustavo.jpg?v=2" width="640" height="800" loading="lazy" alt="Foto de Gustavo Alonso Olivares Lao">
+                            </div>
+                            <div class="member__body">
+                                <p class="member__code"><small data-i18n="team_code">Código de alumno</small><b>U202216448</b></p>
+                                <h3 class="member__name">Gustavo Alonso Olivares Lao</h3>
+                                <p class="member__quote" data-i18n="team_m3_quote">“Convierto datos e inteligencia artificial en interfaces que optimizan procesos.”</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card spot member">
+                        <div class="bezel__core member__core">
+                            <div class="member__photo">
+                                <img class="member__img" src="public/team/andre.jpg?v=2" width="640" height="800" loading="lazy" alt="Foto de Andre Sebastian Quispe Almonacid">
+                            </div>
+                            <div class="member__body">
+                                <p class="member__code"><small data-i18n="team_code">Código de alumno</small><b>U201815005</b></p>
+                                <h3 class="member__name">Andre Sebastian Quispe Almonacid</h3>
+                                <p class="member__quote" data-i18n="team_m4_quote">“Entiendo cómo funcionan las cosas desde la raíz y convierto la lógica en soluciones limpias.”</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bezel reveal-card spot member">
+                        <div class="bezel__core member__core">
+                            <div class="member__photo">
+                                <img class="member__img" src="public/team/alexis.jpg?v=2" width="640" height="800" loading="lazy" alt="Foto de Alexis Calin Torres Huaman">
+                            </div>
+                            <div class="member__body">
+                                <p class="member__code"><small data-i18n="team_code">Código de alumno</small><b>U20241G152</b></p>
+                                <h3 class="member__name">Alexis Calin Torres Huaman</h3>
+                                <p class="member__quote" data-i18n="team_m5_quote">“Investigo nuevas herramientas y propongo ideas que mejoran cada proyecto.”</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        </div>
+
+        <!-- LLAMADA FINAL A LA ACCIÓN -->
+        <section id="empezar" class="section cta">
+            <div class="container cta__grid">
+                <div class="cta__info">
+                    <p class="eyebrow reveal"><span class="eyebrow__dot"></span><span data-i18n="cta_tag">EMPIEZA HOY</span></p>
+                    <h2 class="h2" data-split data-i18n="cta_title">Lleva el control de tu minimarket con <em>OrganiK</em></h2>
+                    <p class="lead reveal" data-i18n="cta_desc">Inicia sesión y gestiona inventario, lotes, vencimientos y abastecimiento desde un solo lugar.</p>
+                    <div class="reveal">
+                        <a href="https://organik-app-d6e58.web.app/login" data-app-path="/login" class="btn btn--lg magnetic">
+                            <span class="btn__label" data-i18n="nav_login">Iniciar sesión</span>
+                            <span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5"/></svg></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="seal reveal" aria-hidden="true">
+                    <svg viewBox="0 0 200 200" class="seal__text">
+                        <defs><path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+                        <text><textPath href="#circ" startOffset="0" textLength="482" lengthAdjust="spacing">ORGANIK · INVENTARIO · LOTES · VENCIMIENTOS · ALERTAS ·</textPath></text>
+                    </svg>
+                    <svg viewBox="0 0 48 48" class="seal__leaf" fill="none"><path d="M12 36C12 22 20 13 37 12c0 16-9 24-25 24z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 36l14-14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__top">
+            <div class="footer__left">
+                <a href="#hero" class="logo">
+                    <span class="logo__mark"><svg viewBox="0 0 32 32" fill="none"><path d="M9 23c0-8 5-13 14-14 0 9-5 14-14 14z" fill="currentColor"/><path d="M9 23l8-8" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                    <span class="logo__text">OrganiK</span>
+                </a>
+                <span class="copyright" data-i18n="footer_copyright">© 2026 OrganiK. Todos los derechos reservados.</span>
+            </div>
+            <div class="footer__links">
+                <a href="terminos.html" data-i18n="footer_terms">Términos y condiciones</a>
+                <a href="privacidad.html" data-i18n="footer_privacy">Política de privacidad</a>
+                <a href="#hero" class="to-top magnetic"><span data-i18n="back_top">Volver arriba</span><span class="btn__icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.5 7.5L8 3l4.5 4.5"/></svg></span></a>
+            </div>
+        </div>
+        <div class="footer__word" aria-hidden="true"><span>O</span><span>r</span><span>g</span><span>a</span><span>n</span><span>i</span><span>K</span></div>
+    </footer>
+
+    <script src="public/i18n/translations.js"></script>
+    <script src="main.js"></script>
+    <script src="plans.js"></script>
+</body>
+</html>
