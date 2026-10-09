@@ -50,6 +50,10 @@ window.I18N = {
         plan_f1: "Hasta 500 productos", plan_f2: "1 usuario", plan_f3: "Soporte por email",
         plan_f4: "Productos ilimitados", plan_f5: "Hasta 3 usuarios", plan_f6: "Alertas WhatsApp",
         plan_f7: "Múltiples sucursales", plan_f8: "Usuarios ilimitados", plan_f9: "Soporte 24/7",
+        seg_minimarket: "Minimarkets", seg_supplier: "Proveedores",
+        splan_1_title: "Catálogo", splan_2_title: "Aliado",
+        splan_f1: "Publica tus productos y lotes", splan_f2: "Disponibilidad visible para tus minimarkets", splan_f3: "Consulta de necesidades",
+        splan_f4: "Todo lo del plan Catálogo", splan_f5: "Pedidos a minimarkets vinculados", splan_f6: "Historial de abastecimiento",
         btn_choose: "Elegir plan",
         team_tag: "NUESTRO EQUIPO",
         team_title: "Las personas detrás de <em>OrganiK</em>",
@@ -73,7 +77,7 @@ window.I18N = {
         cta_desc: "Inicia sesión y gestiona inventario, lotes, vencimientos y abastecimiento desde un solo lugar.",
         footer_copyright: "© 2026 OrganiK. Todos los derechos reservados.",
         footer_terms: "Términos y condiciones", footer_privacy: "Política de privacidad",
-
+        
         // Traducciones para Términos y Condiciones
         terms_title: "Términos y Condiciones",
         terms_intro: "Última actualización: Septiembre 2026. Al utilizar los servicios de OrganiK, usted acepta estar sujeto a los siguientes términos y condiciones.",
@@ -160,6 +164,10 @@ window.I18N = {
         plan_f1: "Up to 500 products", plan_f2: "1 user", plan_f3: "Email support",
         plan_f4: "Unlimited products", plan_f5: "Up to 3 users", plan_f6: "WhatsApp Alerts",
         plan_f7: "Multiple branches", plan_f8: "Unlimited users", plan_f9: "24/7 Support",
+        seg_minimarket: "Minimarkets", seg_supplier: "Suppliers",
+        splan_1_title: "Catalog", splan_2_title: "Partner",
+        splan_f1: "Publish your products and lots", splan_f2: "Availability visible to your minimarkets", splan_f3: "Consult needs",
+        splan_f4: "Everything in the Catalog plan", splan_f5: "Orders to linked minimarkets", splan_f6: "Supply history",
         btn_choose: "Choose plan",
         team_tag: "OUR TEAM",
         team_title: "The people behind <em>OrganiK</em>",
