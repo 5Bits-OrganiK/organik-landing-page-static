@@ -12,7 +12,7 @@ Está construida con HTML, CSS y JavaScript nativo: sin frameworks, sin librerí
 - `styles.css`: sistema de diseño, estilos, animaciones y responsive.
 - `main.js`: animaciones, interacciones y cambio de idioma.
 - `public/`: favicon y recursos estáticos.
-- `public/team/`: fotos del equipo (ver `public/team/LEEME.md` para reemplazar los placeholders).
+- `public/team/`: fotos del equipo (ver `public/team/TEAM MEMBERS.md` para reemplazar los placeholders).
 - `public/i18n/translations.js`: traducciones ES / EN de todo el sitio.
 
 ## Ejecutar localmente
